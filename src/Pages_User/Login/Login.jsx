@@ -3,13 +3,14 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
-import  { AuthContext } from "../../Provider/AuthProvider";
+import { AuthContext } from "../../Provider/AuthProvider";
 import toast from "react-hot-toast";
 
 const Login = () => {
-    const { sign_in_email_pass } = useContext(AuthContext)
+    const { sign_in_email_pass, sign_in_with_google } = useContext(AuthContext);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -19,16 +20,33 @@ const Login = () => {
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
+
+        if (!email || !password) {
+            toast.error("Please fill in all fields.");
+            return;
+        }
+
         sign_in_email_pass(email, password)
-            .then(res => {
+            .then((res) => {
                 console.log(res.user);
-                toast.success("Login successfully")
+                toast.success("Login successfully");
                 form.reset();
                 navigate("/");
             })
-            .catch(err => {
+            .catch((err) => {
                 toast.error(err.message);
+            });
+    };
+
+    const handleGoogle = () => {
+        sign_in_with_google()
+            .then(() => {
+                toast.success("Login Successfully");
+                navigate("/");
             })
+            .catch((err) => {
+                toast.error(err.message);
+            });
     };
 
     return (
@@ -60,6 +78,7 @@ const Login = () => {
                                 <span
                                     className="input-group-text"
                                     onClick={togglePasswordVisibility}
+                                    style={{ cursor: "pointer" }}
                                 >
                                     {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
                                 </span>
@@ -76,13 +95,17 @@ const Login = () => {
                     </Form>
                     <div className="text-center mt-3">
                         <p>Or login with:</p>
-                        <Button variant="outline-primary" className="me-2">
+                        <Button
+                            onClick={handleGoogle}
+                            variant="outline-primary"
+                            className="me-2"
+                        >
                             <FaGoogle /> Google
                         </Button>
-                        <Button variant="outline-primary" className="me-2">
+                        <Button variant="outline-primary" className="me-2" disabled>
                             <FaFacebook /> Facebook
                         </Button>
-                        <Button variant="outline-primary">
+                        <Button variant="outline-primary" disabled>
                             <FaGithub /> GitHub
                         </Button>
                     </div>
