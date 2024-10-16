@@ -11,7 +11,8 @@ import Register from "../Pages_User/Register/Register";
 import TermsAndConditions from "../Components/TermsAndConditions/TermsAndConditions";
 import ForgotPassword from "../Components/ForgotPassword/ForgotPassword";
 import Service_Details from "../Pages_User/Services/Service_Details";
-import Booking from "../Pages_User/Booking/Booking";
+import Booking_Form from "../Pages_User/Booking/Booking_Form";
+import MyBooking from "../Pages_User/MyBooking/MyBooking";
 
 export const router = createBrowserRouter([
   {
@@ -49,7 +50,11 @@ export const router = createBrowserRouter([
           return fetch(`http://localhost:5000/api/v1/services/${params.id}`)
             .then(res => res.json());
         },
-        element:<Booking/>
+        element:<Booking_Form/>
+      },
+      {
+        path: "/my-booking",
+        element:<MyBooking/>
       },
       {
         path: "login",
