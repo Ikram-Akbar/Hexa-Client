@@ -10,6 +10,8 @@ import Login from "../Pages_User/Login/Login";
 import Register from "../Pages_User/Register/Register";
 import TermsAndConditions from "../Components/TermsAndConditions/TermsAndConditions";
 import ForgotPassword from "../Components/ForgotPassword/ForgotPassword";
+import Service_Details from "../Pages_User/Services/Service_Details";
+import Booking from "../Pages_User/Booking/Booking";
 
 export const router = createBrowserRouter([
   {
@@ -27,7 +29,27 @@ export const router = createBrowserRouter([
       },
       {
         path: "services",
+        loader: async () => {
+          return fetch("http://localhost:5000/api/v1/services")
+            .then(res => res.json());
+        },
         element: <Services />,
+      },
+      {
+        path: "/services/:id",
+        loader: async ({params}) => {
+          return fetch(`http://localhost:5000/api/v1/services/${params.id}`)
+            .then(res => res.json());
+        },
+        element:<Service_Details/>
+      },
+      {
+        path: "/booking/:id",
+        loader: async ({ params }) => {
+          return fetch(`http://localhost:5000/api/v1/services/${params.id}`)
+            .then(res => res.json());
+        },
+        element:<Booking/>
       },
       {
         path: "login",

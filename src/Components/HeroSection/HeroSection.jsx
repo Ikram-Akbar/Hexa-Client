@@ -1,4 +1,5 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -15,7 +16,7 @@ const HeroSection = () => {
           <Col>
             <h1>Your Trusted Car Servicing Partner</h1>
             <p>Experience top-notch car care with our expert services.</p>
-            <Button variant="light" size="lg" href="/book-service">
+            <Button as={Link} to="/services" variant="light">
               Book a Service
             </Button>
           </Col>
