@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Navbar, Nav, Container, Button, Image } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
-import{ AuthContext } from "../../Provider/AuthProvider";
+import { AuthContext } from "../../Provider/AuthProvider";
 import toast from "react-hot-toast";
 
 const navItems = [
@@ -9,6 +9,7 @@ const navItems = [
   { path: "/services", name: "Service" },
   { path: "/about", name: "About Us" },
   { path: "/contact", name: "Contact" },
+  { path: "/my-booking", name: "My Booking" }
 ];
 
 const Header = () => {

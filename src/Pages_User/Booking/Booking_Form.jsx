@@ -1,13 +1,20 @@
-import { useContext } from 'react';
-import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
-import { FaUser, FaEnvelope, FaPhone, FaCalendarAlt, FaDollarSign } from 'react-icons/fa';
-import { useLoaderData } from 'react-router-dom';
-import { AuthContext } from '../../Provider/AuthProvider';
+import { useContext } from "react";
+import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import {
+    FaUser,
+    FaEnvelope,
+    FaPhone,
+    FaCalendarAlt,
+    FaDollarSign,
+} from "react-icons/fa";
+import { useLoaderData } from "react-router-dom";
+import { AuthContext } from "../../Provider/AuthProvider";
+import toast from "react-hot-toast";
 
-const Booking = () => {
-    const { user } = useContext(AuthContext)
+const Booking_Form = () => {
+    const { user } = useContext(AuthContext);
     const serviceDetails = useLoaderData();
-    const { title, price, img, } = serviceDetails;
+    const { title, price, img } = serviceDetails;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -25,8 +32,23 @@ const Booking = () => {
             service_price: price,
             service_img: img,
         };
-        console.log(booking_data);
-
+        fetch("http://localhost:5000/api/v1/booking", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify(booking_data),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                if (data.insertedId) {
+                    toast.success("Booking done");
+                }
+            })
+            .catch((error) => {
+                toast.error(error);
+            })
     };
 
     return (
@@ -35,9 +57,17 @@ const Booking = () => {
                 {/* Booking Information Card */}
                 <Col lg={6} md={8} sm={12} className="mb-4">
                     <Card className="shadow-sm p-3 mb-5 bg-white rounded">
-                        <Card.Img variant="top" src={img} alt={title} style={{ maxHeight: '250px', objectFit: 'cover' }} />
+                        <Card.Img
+                            variant="top"
+                            src={img}
+                            alt={title}
+                            style={{ maxHeight: "250px", objectFit: "cover" }}
+                        />
                         <Card.Body>
-                            <Card.Title className="text-center mb-4" style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                            <Card.Title
+                                className="text-center mb-4"
+                                style={{ fontSize: "1.5rem", fontWeight: "bold" }}
+                            >
                                 {title}
                             </Card.Title>
                             <div className="d-flex justify-content-between align-items-center mt-4">
@@ -51,7 +81,9 @@ const Booking = () => {
 
                 {/* Booking Form */}
                 <Col lg={6} md={8} sm={12} className="mb-4">
-                    <h3 className="text-center mb-4" style={{ fontWeight: 'bold' }}>Book Your Service</h3>
+                    <h3 className="text-center mb-4" style={{ fontWeight: "bold" }}>
+                        Book Your Service
+                    </h3>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formName" className="mb-3">
                             <Form.Label>
@@ -62,7 +94,8 @@ const Booking = () => {
                                 defaultValue={user?.displayName}
                                 type="text"
                                 placeholder="Enter your full name"
-                                required />
+                                required
+                            />
                         </Form.Group>
 
                         <Form.Group controlId="formEmail" className="mb-3">
@@ -74,7 +107,8 @@ const Booking = () => {
                                 readOnly
                                 type="email"
                                 placeholder="Enter your email"
-                                required />
+                                required
+                            />
                         </Form.Group>
 
                         <Form.Group controlId="formPhone" className="mb-3">
@@ -82,20 +116,18 @@ const Booking = () => {
                                 <FaPhone /> Phone Number
                             </Form.Label>
                             <Form.Control
-                                name='phone'
+                                name="phone"
                                 type="tel"
                                 placeholder="Enter your phone number"
-                                required />
+                                required
+                            />
                         </Form.Group>
 
                         <Form.Group controlId="formDate" className="mb-3">
                             <Form.Label>
                                 <FaCalendarAlt /> Booking Date
                             </Form.Label>
-                            <Form.Control
-                                name='date'
-                                type="date"
-                                required />
+                            <Form.Control name="date" type="date" required />
                         </Form.Group>
 
                         {/* Submit Button */}
@@ -111,4 +143,4 @@ const Booking = () => {
     );
 };
 
-export default Booking;
+export default Booking_Form;
