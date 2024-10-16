@@ -9,6 +9,7 @@ import Services from "../Pages_User/Services/Services";
 import Login from "../Pages_User/Login/Login";
 import Register from "../Pages_User/Register/Register";
 import TermsAndConditions from "../Components/TermsAndConditions/TermsAndConditions";
+import ForgotPassword from "../Components/ForgotPassword/ForgotPassword";
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +39,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "TermsAndConditions",
-        element:<TermsAndConditions/>
+        element: <TermsAndConditions />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
       },
     ],
   },
