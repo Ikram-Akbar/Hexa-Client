@@ -13,6 +13,7 @@ import ForgotPassword from "../Components/ForgotPassword/ForgotPassword";
 import Service_Details from "../Pages_User/Services/Service_Details";
 import Booking_Form from "../Pages_User/Booking/Booking_Form";
 import MyBooking from "../Pages_User/MyBooking/MyBooking";
+import PrivateRoute from "../Pages_User/PrivateRoute/PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ export const router = createBrowserRouter([
           return fetch(`http://localhost:5000/api/v1/services/${params.id}`)
             .then(res => res.json());
         },
-        element:<Booking_Form/>
+        element: <PrivateRoute><Booking_Form /></PrivateRoute>
       },
       {
         path: "/my-booking",

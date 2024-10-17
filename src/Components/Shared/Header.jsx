@@ -54,9 +54,10 @@ const Header = () => {
                   width={40}
                   height={40}
                 />
-                <Button onClick={handle_log_out} variant="outline-primary" className="ml-3">
+                <Button onClick={handle_log_out} as={Link} to="/" variant="outline-primary" className="ml-3">
                   Logout
                 </Button>
+
               </div></> : <>
               <div >
                 <Image
