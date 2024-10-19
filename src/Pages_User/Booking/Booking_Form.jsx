@@ -7,13 +7,14 @@ import {
     FaCalendarAlt,
     FaDollarSign,
 } from "react-icons/fa";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import toast from "react-hot-toast";
 
 const Booking_Form = () => {
     const { user } = useContext(AuthContext);
     const serviceDetails = useLoaderData();
+    const navigate = useNavigate();
     const { title, price, img } = serviceDetails;
 
     const handleSubmit = (e) => {
@@ -44,7 +45,9 @@ const Booking_Form = () => {
                 console.log(data);
                 if (data.insertedId) {
                     toast.success("Booking done");
+                    navigate("/my-booking")
                 }
+
             })
             .catch((error) => {
                 toast.error(error);
