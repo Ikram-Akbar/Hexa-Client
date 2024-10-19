@@ -2,13 +2,15 @@ import { useContext, useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import toast from "react-hot-toast";
 
 const Login = () => {
     const { sign_in_email_pass, sign_in_with_google } = useContext(AuthContext);
     const [showPassword, setShowPassword] = useState(false);
+    const location = useLocation();
+    console.log(location);
     const navigate = useNavigate();
 
     const togglePasswordVisibility = () => {
@@ -31,7 +33,7 @@ const Login = () => {
                 console.log(res.user);
                 toast.success("Login successfully");
                 form.reset();
-                navigate("/");
+                navigate(location?.state? location.state:"/");
             })
             .catch((err) => {
                 toast.error(err.message);
@@ -42,7 +44,7 @@ const Login = () => {
         sign_in_with_google()
             .then(() => {
                 toast.success("Login Successfully");
-                navigate("/");
+                navigate(location.state ? location.state : "/");
             })
             .catch((err) => {
                 toast.error(err.message);
