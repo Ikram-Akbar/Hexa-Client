@@ -3,6 +3,7 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import { Table, Button, Container } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const MyBooking = () => {
     const { user } = useContext(AuthContext);
@@ -11,33 +12,31 @@ const MyBooking = () => {
     useEffect(() => {
         if (user?.email) {
             const URL = `http://localhost:5000/api/v1/booking?email=${user.email}`;
-            fetch(URL)
-                .then(res => res.json())
-                .then((data) => setBookings(data))
-                .catch(error => console.error('Error fetching bookings:', error));
+
+            axios.get(URL, { withCredentials: true })
+                .then((res) => setBookings(res.data))
+                .catch((error) => {
+                    console.error("Error fetching bookings:", error);
+                    toast.error("Failed to fetch bookings.");
+                });
         }
     }, [user?.email]);
 
     const handleDelete = (id) => {
-       
-        const Url = `http://localhost:5000/api/v1/booking/${id}`;
-        fetch(Url, {
-            method: "DELETE"
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                
-                if (data) {
+        const URL = `http://localhost:5000/api/v1/booking/${id}`;
+        axios.delete(URL, { withCredentials: true })
+            .then((res) => {
+                if (res.data) {
                     const remainItems = bookings.filter((booking) => booking._id !== id);
                     setBookings(remainItems);
                     toast.success("Booking deleted successfully!");
                 }
             })
-            .catch(error => {
-                console.error('Error deleting booking:', error);
+            .catch((error) => {
+                console.error("Error deleting booking:", error);
                 toast.error("Failed to delete booking.");
             });
-    }
+    };
 
     return (
         <Container className="mt-5">
@@ -67,12 +66,21 @@ const MyBooking = () => {
                                     <td>${booking.service_price}</td>
                                     <td>{new Date(booking.date).toLocaleDateString()}</td>
                                     <td>
-                                        <span className={`badge ${booking.status === "Confirmed" ? "bg-success" : "bg-warning"}`}>
+                                        <span
+                                            className={`badge ${booking.status === "Confirmed"
+                                                ? "bg-success"
+                                                : "bg-warning"
+                                                }`}
+                                        >
                                             {booking?.status || "Waiting"}
                                         </span>
                                     </td>
                                     <td>
-                                        <Button onClick={() => { handleDelete(booking._id) }} variant="danger" size="sm">
+                                        <Button
+                                            onClick={() => handleDelete(booking._id)}
+                                            variant="danger"
+                                            size="sm"
+                                        >
                                             <FaTrash /> Delete
                                         </Button>
                                     </td>
@@ -80,7 +88,9 @@ const MyBooking = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="8" className="text-center">No bookings found.</td>
+                                <td colSpan="8" className="text-center">
+                                    No bookings found.
+                                </td>
                             </tr>
                         )}
                     </tbody>

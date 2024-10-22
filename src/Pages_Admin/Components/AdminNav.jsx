@@ -9,6 +9,7 @@ import {
   FaArrowLeft,
   FaArrowRight,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const AdminNav = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -70,6 +71,10 @@ const AdminNav = () => {
         <Nav.Link href="/settings" style={navLinkStyle}>
           <FaCog style={iconStyle} />
           {!collapsed && <span>Settings</span>}
+        </Nav.Link>
+        <Nav.Link as={Link} to="/admin/add-service" style={navLinkStyle}>
+          <FaCog style={iconStyle} />
+          {!collapsed && <span>Add a Service Form </span>}
         </Nav.Link>
 
         <Nav.Link href="/logout" style={navLinkStyle}>

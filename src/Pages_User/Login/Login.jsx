@@ -5,13 +5,13 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const Login = () => {
     const { sign_in_email_pass, sign_in_with_google } = useContext(AuthContext);
     const [showPassword, setShowPassword] = useState(false);
     const location = useLocation();
-    console.log(location);
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -30,10 +30,20 @@ const Login = () => {
 
         sign_in_email_pass(email, password)
             .then((res) => {
-                console.log(res.user);
+                const email = res?.user?.email;
+                const user = { email };
                 toast.success("Login successfully");
                 form.reset();
-                navigate(location?.state? location.state:"/");
+                axios
+                    .post("http://localhost:5000/jwt-auth", user, {
+                        withCredentials: true,
+                    })
+                    .then((res) => {
+                        console.log(res.data);
+                        if (res.data.success) {
+                            navigate(location?.state ? location.state : "/");
+                        }
+                    });
             })
             .catch((err) => {
                 toast.error(err.message);
@@ -42,9 +52,19 @@ const Login = () => {
 
     const handleGoogle = () => {
         sign_in_with_google()
-            .then(() => {
+            .then((res) => {
+                const user = { email: res?.user?.email };
                 toast.success("Login Successfully");
-                navigate(location.state ? location.state : "/");
+                axios
+                    .post("http://localhost:5000/jwt-auth", user, {
+                        withCredentials: true,
+                    })
+                    .then((res) => {
+                        console.log(res.data);
+                        if (res.data.success) {
+                            navigate(location?.state ? location.state : "/");
+                        }
+                    });
             })
             .catch((err) => {
                 toast.error(err.message);

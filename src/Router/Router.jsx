@@ -14,6 +14,7 @@ import Service_Details from "../Pages_User/Services/Service_Details";
 import Booking_Form from "../Pages_User/Booking/Booking_Form";
 import MyBooking from "../Pages_User/MyBooking/MyBooking";
 import PrivateRoute from "../Pages_User/PrivateRoute/PrivateRoute";
+import Service_Form from "../Pages_Admin/ServicePage/Add Service/Service_Form";
 
 export const router = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ export const router = createBrowserRouter([
         path: "/admin/",
         element: <Dashboard />,
       },
+      {
+        path: "/admin/add-service",
+        element:<Service_Form/>
+      }
     ],
   },
 ]);
